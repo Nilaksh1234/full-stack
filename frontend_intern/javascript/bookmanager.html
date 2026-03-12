@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookstore Array Lab</title>
+    <style>
+      :root {
+        --primary: #2c3e50;
+        --bg: #f4f7f6;
+        --card: #ffffff;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg);
+        padding: 40px;
+        color: var(--primary);
+      }
+      .container {
+        max-width: 900px;
+        margin: auto;
+        background: var(--card);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        text-align: center;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      button {
+        padding: 10px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        transition: 0.3s;
+        text-align: left;
+        font-size: 14px;
+      }
+      button:hover {
+        background: #eef2f3;
+        border-color: #3498db;
+        color: #3498db;
+      }
+      button.action {
+        background: #3498db;
+        color: white;
+        border: none;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .output-panel {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .shelf {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+        min-height: 40px;
+        padding: 10px;
+        background: #eee;
+        border-radius: 8px;
+      }
+      .book-item {
+        background: #f1c40f;
+        color: #000;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        border: 1px solid #d4ac0d;
+      }
+      .highlight {
+        color: #3498db;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📚 Bookstore Manager</h1>
+
+      <div class="dashboard">
+        <div class="controls">
+          <h3>Add / Remove</h3>
+          <button onclick="addPush()">Add "History" to end (push)</button>
+          <button onclick="addUnshift()">Add "Art" to start (unshift)</button>
+          <button onclick="removePop()">Remove last (pop)</button>
+          <button onclick="removeShift()">Remove first (shift)</button>
+
+          <h3>Modify & Merge</h3>
+          <button onclick="removeSplice()">Delete index 1 (splice)</button>
+          <button onclick="updateIndex()">
+            Replace index 0 with "Physics"
+          </button>
+          <button onclick="mergeArrivals()">Merge New Arrivals (concat)</button>
+          <button onclick="flattenCategories()">
+            Flatten Categories (flat)
+          </button>
+          <button onclick="copyBooks()">Copy index 0 to 2 (copyWithin)</button>
+        </div>
+
+        <div class="controls">
+          <h3>View & Display</h3>
+          <button class="action" onclick="showSlice()">
+            Show Featured (slice 0-2)
+          </button>
+          <button class="action" onclick="showStrings()">
+            Display as Strings (join/toString)
+          </button>
+          <button class="action" onclick="resetArray()">
+            Reset to Default
+          </button>
+
+          <div class="output-panel" id="console">
+            Click a button to start managing...
+          </div>
+        </div>
+      </div>
+
+      <h3>Live Inventory (forEach)</h3>
+      <div id="shelf" class="shelf"></div>
+      <p>
+        <strong>Total Books (length):</strong> <span id="lengthCount">0</span>
+      </p>
+    </div>
+
+    <script>
+  
+      let books = ["Math", "Science", "English"];
+
+      function render() {
+        const shelf = document.getElementById("shelf");
+        const count = document.getElementById("lengthCount");
+
+      
+        count.innerText = books.length;
+
+        
+        shelf.innerHTML = "";
+        books.forEach((book, index) => {
+          shelf.innerHTML += `<div class="book-item">${index}: ${book}</div>`;
+        });
+      }
+
+     
+      function addPush() {
+        books.push("History");
+        log("Pushed 'History'");
+        render();
+      }
+      function addUnshift() {
+        books.unshift("Art");
+        log("Unshifted 'Art'");
+        render();
+      }
+
+      
+      function removePop() {
+        let b = books.pop();
+        log(`Popped: ${b}`);
+        render();
+      }
+      function removeShift() {
+        let b = books.shift();
+        log(`Shifted: ${b}`);
+        render();
+      }
+
+      function removeSplice() {
+        books.splice(1, 1);
+        log("Spliced index 1");
+        render();
+      }
+
+     
+      function mergeArrivals() {
+        let newArrivals = ["Biology", "Philosophy"];
+        books = books.concat(newArrivals);
+        log("Concatenated New Arrivals");
+        render();
+      }
+
+      
+      function copyBooks() {
+        books.copyWithin(2, 0, 1);
+        log("copyWithin: Copied index 0 to index 2");
+        render();
+      }
+
+      
+      function flattenCategories() {
+        let nested = ["Fiction", ["Mystery", "Drama"]];
+        books = books.concat(nested).flat();
+        log("Added nested categories and Flattened");
+        render();
+      }
+
+   
+      function showSlice() {
+        let featured = books.slice(0, 2);
+        log(`Featured (slice 0,2): ${featured.join(", ")}`);
+      }
+
+      
+      function showStrings() {
+        let str = books.toString();
+        let joined = books.join(" ➔ ");
+        log(`toString: ${str}<br><br>join: ${joined}`);
+      }
+
+ 
+      function updateIndex() {
+        if (books.length > 0) {
+          books[0] = "Physics";
+          log("Updated Index 0 to 'Physics'");
+          render();
+        }
+      }
+
+      function resetArray() {
+        books = ["Math", "Science", "English"];
+        log("Array Reset");
+        render();
+      }
+
+      function log(msg) {
+        document.getElementById("console").innerHTML = `> ${msg}`;
+      }
+
+    
+      render();
+    </script>
+  </body>
+</html>
