@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express Rail | Parallel Array System</title>
+    <style>
+      :root {
+        --rail-blue: #1a2a6c;
+        --rail-orange: #f2a341;
+        --bg: #f0f2f5;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: var(--bg);
+        padding: 20px;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* Header & Input Section */
+      .panel {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .grid-inputs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      input,
+      select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      button {
+        cursor: pointer;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+      .btn-add {
+        background: var(--rail-blue);
+        color: white;
+      }
+      .btn-add:hover {
+        background: #0d1a4a;
+      }
+      .btn-remove {
+        background: #e74c3c;
+        color: white;
+        padding: 5px 10px;
+      }
+
+      /* Table Styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+      }
+      th {
+        background: var(--rail-blue);
+        color: white;
+        padding: 12px;
+        text-align: left;
+      }
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      /* Stats Section */
+      .stats-bar {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .stat-card {
+        background: var(--rail-orange);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        flex: 1;
+        min-width: 150px;
+        text-align: center;
+      }
+
+      .logic-log {
+        font-family: monospace;
+        font-size: 0.9em;
+        background: #222;
+        color: #0f0;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="panel">
+        <h2 style="color: var(--rail-blue); margin-top: 0">
+          🚂 Train Reservation Panel
+        </h2>
+        <div class="grid-inputs">
+          <input type="text" id="nameIn" placeholder="Passenger Name" />
+          <input type="number" id="ageIn" placeholder="Age" />
+          <input type="number" id="seatIn" placeholder="Seat No." />
+          <select id="genderIn">
+            <option value="M">Male (M)</option>
+            <option value="F">Female (F)</option>
+          </select>
+        </div>
+        <button class="btn-add" onclick="addPassenger()">Add Passenger</button>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">Total Age: <span id="statTotal">0</span></div>
+        <div class="stat-card">Seniors: <span id="statSeniors">0</span></div>
+        <div class="stat-card">
+          Status: <span id="statMinor">All Adults</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Passenger Manifesto</h3>
+        <table id="passengerTable">
+          <thead>
+            <tr>
+              <th>Name (Uppercase)</th>
+              <th>Age</th>
+              <th>Seat</th>
+              <th>Gender</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>JavaScript Logic Logs</h3>
+        <div class="logic-log" id="logOutput">System initialized...</div>
+      </div>
+    </div>
+
+    <script>
+      // THE 4 PARALLEL ARRAYS
+      let names = ["Nilaksh ", " Amit"];
+      let ages = [,];
+      let seats = [,];
+      let genders = ["", ""];
+
+      function updateUI() {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+
+        // 1. Passenger List (forEach) & 3. Uppercase Names (map)
+        const upperNames = names.map((n) => n.toUpperCase());
+
+        upperNames.forEach((name, i) => {
+          let row = `<tr>
+                <td>${name}</td>
+                <td>${ages[i]}</td>     
+                <td>${seats[i]}</td>
+                <td>${genders[i]}</td>
+                <td><button class="btn-remove" onclick="removePassenger(${i})">Remove</button></td>
+            </tr>`;
+          tbody.innerHTML += row;
+        });
+
+        runLogicOperations();
+      }
+
+      function addPassenger() {
+        const n = document.getElementById("nameIn").value;
+        const a = parseInt(document.getElementById("ageIn").value);
+        const s = parseInt(document.getElementById("seatIn").value);
+        const g = document.getElementById("genderIn").value;
+
+        if (!n || !a || !s) return alert("Please fill all fields");
+
+        names = [...names, n];
+        ages = [...ages, a];
+        seats = [...seats, s];
+        genders = [...genders, g];
+
+        updateUI();
+      }
+
+      function removePassenger(index) {
+        names = names.filter((_, i) => i !== index);
+        ages = ages.filter((_, i) => i !== index);
+        seats = seats.filter((_, i) => i !== index);
+        genders = genders.filter((_, i) => i !== index);
+
+        updateUI();
+      }
+
+      function runLogicOperations() {
+        const seniors = names.filter((_, i) => ages[i] >= 60);
+        document.getElementById("statSeniors").innerText = seniors.length;
+
+        const total = ages.reduce((acc, curr) => acc + curr, 0);
+        document.getElementById("statTotal").innerText = total;
+
+        const totalRev = ages.reduceRight((acc, curr) => acc + curr, 0);
+
+        // 6. Check Adults
+        const allAdults = ages.every((age) => age >= 18);
+
+        // 7. Check Minors
+        const hasMinor = ages.some((age) => age < 18);
+        document.getElementById("statMinor").innerText = hasMinor
+          ? "Minors Aboard"
+          : "All Adults";
+
+        // 8. Convert Seat Numbers (Using your specific string example)
+        const seatStr = "12,13,14,15";
+        const convertedSeats = Array.from(seatStr.split(","), Number);
+
+        // 10. Rest Operator Demo
+        const [first, ...rest] = names;
+
+        // Log Output for Demonstration
+        document.getElementById("logOutput").innerHTML = `
+            > 2. Senior Names: ${seniors.join(", ") || "None"}<br>
+            > 5. ReduceRight Total: ${totalRev}<br>
+            > 6. Every (All Adults?): ${allAdults}<br>
+            > 8. Array.from Demo: [${convertedSeats.join(" | ")}]<br>
+            > 10. Rest (Remaining): ${rest.join(", ") || "None"}
+        `;
+      }
+      updateUI();
+    </script>
+  </body>
+</html>
