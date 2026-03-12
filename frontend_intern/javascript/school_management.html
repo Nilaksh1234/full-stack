@@ -1,0 +1,85 @@
+~<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+       // 1. Define the students object
+const students = {
+  student1: { name: "Alice", marks: { math: 85, science: 90, english: 78 } },
+  student2: { name: "Bob", marks: { math: 75, science: 80, english: 88 } },
+  student3: { name: "Charlie", marks: { math: 95, science: 89, english: 92 } },
+  student4: { name: "Dave", marks: null } // Intentionally problematic for bonus
+};
+
+/**
+ * Simulates processing a single student record with a delay.
+ */
+async function processStudent(studentData) {
+  return new Promise((resolve, reject) => {
+    // Simulate a random delay between 500ms and 1500ms
+    const delay = Math.floor(Math.random() * 1000) + 500;
+
+    setTimeout(() => {
+      try {
+        if (!studentData.marks) {
+          throw new Error(`Missing marks for ${studentData.name}`);
+        }
+
+        const markValues = Object.values(studentData.marks);
+        const total = markValues.reduce((sum, mark) => sum + mark, 0);
+        const average = total / markValues.length;
+
+        // Bonus: Classification
+        const status = average >= 80 ? "Pass" : "Fail";
+
+        resolve({
+          name: studentData.name,
+          average: average.toFixed(2),
+          status: status
+        });
+      } catch (error) {
+        reject(error.message);
+      }
+    }, delay);
+  });
+}
+
+/**
+ * Iterates through all students and logs the final report.
+ */
+async function processAllStudents() {
+  const results = [];
+
+  console.log("--- Starting Student Processing ---");
+
+  // Use for...in to iterate through the object keys
+  for (const key in students) {
+    const student = students[key];
+    console.log(`Processing student: ${student.name}...`);
+
+    try {
+      // await ensures sequential processing
+      const result = await processStudent(student);
+      results.push(result);
+    } catch (error) {
+      console.error(`⚠️ Error: ${error}`);
+    }
+  }
+
+  console.log("\n--- Processing Complete. Final Results: ---");
+
+  // Use for...of to iterate through the results array
+  for (const record of results) {
+    console.log(`■ ${record.name} has an average of ${record.average} (${record.status})`);
+  }
+}
+
+// Execute the program
+processAllStudents();
+    </script>
+</body>
+</html>
