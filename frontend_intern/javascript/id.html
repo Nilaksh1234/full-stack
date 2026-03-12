@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ID Generator</title>
+    <style>
+      .container {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      .card1 {
+        margin-bottom: 20px;
+      }
+      input {
+        display: block;
+        margin-bottom: 10px;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>UNIQUE ID GENERATOR</h1>
+      <div class="card1">
+        <input type="text" placeholder="Enter your Name" />
+        <input type="text" placeholder="Enter Your E-mail Address" />
+        <button onclick="generateID()">Register</button>
+      </div>
+
+      <div>
+        <h3>Generated IDs:</h3>
+        <ul id="idList"></ul>
+      </div>
+    </div>
+    <script>
+      const storedIDs = [];
+
+      function generateID() {
+        const newID = "id-" + Math.random().toString(36).substr(2, 5);
+
+        storedIDs.push(newID);
+
+        displayIDs();
+
+        console.log("Current ID Storage:", storedIDs);
+      }
+
+      function displayIDs() {
+        const listElement = document.getElementById("idList");
+
+        listElement.innerHTML = "";
+
+        storedIDs.forEach((id) => {
+          const li = document.createElement("li");
+          li.textContent = id;
+          listElement.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>
