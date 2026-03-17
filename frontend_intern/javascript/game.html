@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Meteor Dodger</title>
+    <style>
+      body {
+        margin: 0;
+        background: #111;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: sans-serif;
+      }
+      canvas {
+        background: #000;
+        border: 3px solid #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Score: <span id="score">0</span></h2>
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      const scoreDisplay = document.getElementById("score");
+
+      let score = 0;
+      let player = { x: 180, y: 460, size: 30, speed: 7 };
+      let enemies = [];
+      let gameActive = true;
+
+      // Movement control
+      let keys = {};
+      document.addEventListener("keydown", (e) => (keys[e.key] = true));
+      document.addEventListener("keyup", (e) => (keys[e.key] = false));
+
+      function spawnEnemy() {
+        if (!gameActive) return;
+        let size = Math.random() * 30 + 20; // Random size between 20-50
+        enemies.push({
+          x: Math.random() * (canvas.width - size),
+          y: -size,
+          size: size,
+          speed: Math.random() * 3 + 2, // Random speed
+        });
+        // Schedule next enemy spawn
+        setTimeout(spawnEnemy, 1000 - Math.min(score * 10, 800));
+      }
+
+      function update() {
+        if (!gameActive) return;
+
+        
+        if ((keys["ArrowLeft"] || keys["a"]) && player.x > 0)
+          player.x -= player.speed;
+        if (
+          (keys["ArrowRight"] || keys["d"]) &&
+          player.x < canvas.width - player.size
+        )
+          player.x += player.speed;
+
+        
+        enemies.forEach((enemy, index) => {
+          enemy.y += enemy.speed;
+
+      
+          if (
+            player.x < enemy.x + enemy.size &&
+            player.x + player.size > enemy.x &&
+            player.y < enemy.y + enemy.size &&
+            player.y + player.size > enemy.y
+          ) {
+            gameActive = false;
+            alert("Game Over! Final Score: " + score);
+            location.reload();
+          }
+
+          // Remove enemies that fall off screen and increase score
+          if (enemy.y > canvas.height) {
+            enemies.splice(index, 1);
+            score++;
+            scoreDisplay.innerText = score;
+          }
+        });
+
+        draw();
+        requestAnimationFrame(update);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        
+        ctx.fillStyle = "#00ffcc";
+        ctx.fillRect(player.x, player.y, player.size, player.size);
+
+       
+        ctx.fillStyle = "#ff4444";
+        enemies.forEach((enemy) => {
+          ctx.fillRect(enemy.x, enemy.y, enemy.size, enemy.size);
+        });
+      }
+
+      spawnEnemy();
+      update();
+    </script>
+  </body>
+</html>
