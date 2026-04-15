@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="demo"></p>
+    <script>
+        let word="hello my name is nilaksh rana";
+        let output="";
+        for(let x of word){
+            output+=x;
+        }
+        console.log(typeof(output));
+
+        const  names=["anmol","rohit","nilaksh","nikhil"];
+        let list="";
+        for (let x of names){
+            console.log(x);
+        }
+        document.getElementById("demo").innerHTML=output;
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>welcome to the java script Iterables</h1>
+    <p id="demo"></p>
+    <script>
+      const guests = new Set([
+        "John",
+        "Jane",
+        "Jack",
+        "Nilaksh",
+        "Rohit",
+        "anmol",
+        "nikhil",
+        "car",
+        "bike",
+        "animals",
+      ]);
+      let list = "";
+      for (const guest of guests) {
+        list += "guest:" + guest + "<br>";
+      }
+      document.getElementById("demo").innerHTML=list;
+    </script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -77,7 +77,7 @@
   <body>
     <div id="quiz-container">
       <h1>Flash Quiz</h1>
-      
+
       <div id="start-screen">
         <p>Test your knowledge!</p>
         <button id="start-btn">Start Quiz</button>
@@ -103,10 +103,31 @@
     <script>
       const questionsData = [
         { q: "What is 2 + 2?", a: ["4", "22", "5", "3"], correct: "4" },
-        { q: "Capital of France?", a: ["Paris", "London", "Berlin", "Rome"], correct: "Paris" },
-        { q: "Which is a JS framework?", a: ["React", "Django", "Laravel", "Flask"], correct: "React" },
-        { q: "HTML stands for?", a: ["HyperText Markup Language", "HighText Machine Language", "HyperTool Multi Language", "None"], correct: "HyperText Markup Language" },
-        { q: "Which symbol is for IDs in CSS?", a: ["#", ".", "@", "&"], correct: "#" }
+        {
+          q: "Capital of France?",
+          a: ["Paris", "London", "Berlin", "Rome"],
+          correct: "Paris",
+        },
+        {
+          q: "Which is a JS framework?",
+          a: ["React", "Django", "Laravel", "Flask"],
+          correct: "React",
+        },
+        {
+          q: "HTML stands for?",
+          a: [
+            "HyperText Markup Language",
+            "HighText Machine Language",
+            "HyperTool Multi Language",
+            "None",
+          ],
+          correct: "HyperText Markup Language",
+        },
+        {
+          q: "Which symbol is for IDs in CSS?",
+          a: ["#", ".", "@", "&"],
+          correct: "#",
+        },
       ];
 
       let currentQuestions = [];
@@ -115,20 +136,20 @@
       let timer;
       let timeLeft = 10;
 
-      const startBtn = document.getElementById('start-btn');
-      const restartBtn = document.getElementById('restart-btn');
-      const gameScreen = document.getElementById('game-screen');
-      const resultScreen = document.getElementById('result-screen');
-      const startScreen = document.getElementById('start-screen');
+      const startBtn = document.getElementById("start-btn");
+      const restartBtn = document.getElementById("restart-btn");
+      const gameScreen = document.getElementById("game-screen");
+      const resultScreen = document.getElementById("result-screen");
+      const startScreen = document.getElementById("start-screen");
 
       function startQuiz() {
         score = { correct: 0, wrong: 0, unanswered: 0 };
         currentIndex = 0;
         currentQuestions = [...questionsData].sort(() => Math.random() - 0.5);
 
-        startScreen.classList.add('hidden');
-        resultScreen.classList.add('hidden');
-        gameScreen.classList.remove('hidden');
+        startScreen.classList.add("hidden");
+        resultScreen.classList.add("hidden");
+        gameScreen.classList.remove("hidden");
         showQuestion();
       }
 
@@ -138,20 +159,22 @@
         }
 
         const data = currentQuestions[currentIndex];
-        document.getElementById('progress').innerText = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
-        document.getElementById('question-text').innerText = data.q;
-        document.getElementById('feedback-text').innerText = "";
+        document.getElementById("progress").innerText =
+          `Question ${currentIndex + 1} of ${currentQuestions.length}`;
+        document.getElementById("question-text").innerText = data.q;
+        document.getElementById("feedback-text").innerText = "";
 
-        const optionsContainer = document.getElementById('options-container');
+        const optionsContainer = document.getElementById("options-container");
         optionsContainer.innerHTML = "";
 
-       
-        [...data.a].sort(() => Math.random() - 0.5).forEach(opt => {
-          const btn = document.createElement('button');
-          btn.innerText = opt;
-          btn.onclick = () => checkAnswer(opt);
-          optionsContainer.appendChild(btn);
-        });
+        [...data.a]
+          .sort(() => Math.random() - 0.5)
+          .forEach((opt) => {
+            const btn = document.createElement("button");
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optionsContainer.appendChild(btn);
+          });
 
         startTimer();
       }
@@ -159,14 +182,14 @@
       function startTimer() {
         clearInterval(timer);
         timeLeft = 10;
-        document.getElementById('timer').innerText = `Time: ${timeLeft}s`;
+        document.getElementById("timer").innerText = `Time: ${timeLeft}s`;
 
         timer = setInterval(() => {
           timeLeft--;
-          document.getElementById('timer').innerText = `Time: ${timeLeft}s`;
+          document.getElementById("timer").innerText = `Time: ${timeLeft}s`;
           if (timeLeft <= 0) {
             clearInterval(timer);
-            checkAnswer(null); 
+            checkAnswer(null);
           }
         }, 1000);
       }
@@ -174,15 +197,14 @@
       function checkAnswer(selected) {
         clearInterval(timer);
         const correct = currentQuestions[currentIndex].correct;
-        const feedback = document.getElementById('feedback-text');
-        
-       
-        const btns = document.querySelectorAll('#options-container button');
-        btns.forEach(b => b.disabled = true);
+        const feedback = document.getElementById("feedback-text");
+
+        const btns = document.querySelectorAll("#options-container button");
+        btns.forEach((b) => (b.disabled = true));
 
         if (selected === null) {
           score.unanswered++;
-          feedback.innerText = "Time's Up!";
+          feedback=.innerText = "Time's Up!";
           feedback.style.color = "orange";
         } else if (selected === correct) {
           score.correct++;
@@ -194,13 +216,12 @@
           feedback.style.color = "red";
         }
 
-       
-        btns.forEach(btn => {
-          if (btn.innerText === correct) btn.classList.add('correct');
-          if (btn.innerText === selected && selected !== correct) btn.classList.add('wrong');
+        btns.forEach((btn) => {
+          if (btn.innerText === correct) btn.classList.add("correct");
+          if (btn.innerText === selected && selected !== correct)
+            btn.classList.add("wrong");
         });
 
-       
         setTimeout(() => {
           currentIndex++;
           showQuestion();
@@ -208,9 +229,9 @@
       }
 
       function showResults() {
-        gameScreen.classList.add('hidden');
-        resultScreen.classList.remove('hidden');
-        document.getElementById('score-summary').innerHTML = `
+        gameScreen.classList.add("hidden");
+        resultScreen.classList.remove("hidden");
+        document.getElementById("score-summary").innerHTML = `
           <div style="text-align: left; display: inline-block;">
             <strong>Correct:</strong> ${score.correct} <br>
             <strong>Wrong:</strong> ${score.wrong} <br>

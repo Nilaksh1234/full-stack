@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p id="demo">map in java script</p>
+    <script>
+      const fruits = new Map([
+        ["apple", 1],
+        ["kiwi", 2],
+        ["oranges", 3],
+        ["litchi", 5],
+        ["mangoes", 6],
+        ["pineapple", 7],
+      ]);
+      let list="";
+      for (const fruit of fruits){
+        list+="fruit:"+fruit[0]+" quantity:"+fruit[1]+"<br>";
+      }
+        document.getElementById("demo").innerHTML=list;
+    </script>
+  </body>
+</html>
